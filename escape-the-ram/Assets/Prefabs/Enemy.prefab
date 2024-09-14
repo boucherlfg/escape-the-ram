@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e6c4f21213e9b047b33b26db60fcd3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectDistance: 5
+  detectDistance: 1
   maxNeighbours: 5
   maxFleeDistance: 1
   speed: 3
