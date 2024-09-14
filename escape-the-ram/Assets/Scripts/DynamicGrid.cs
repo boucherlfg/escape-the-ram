@@ -1,3 +1,4 @@
+using Bytes;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,14 +6,31 @@ using UnityEngine;
 public class DynamicGrid : MonoBehaviour
 {
     [SerializeField]
-    private float spaceBetweenLines;
+    private float spaceBetweenLines = 1.5f;
+    [SerializeField]
+    private float minSpaceBetweenLines = 0.5f;
+    [SerializeField]
+    private float maxSpaceBetweenLines = 1.5f;
     private List<LineRenderer> lines = new();
 
     private void Start()
     {
         lines = GetComponentsInChildren<LineRenderer>().ToList();
+        EventManager.AddEventListener("OnCastUltimate", HandleCastUltimate);
     }
 
+    private void OnDestroy()
+    {
+        EventManager.RemoveEventListener("OnCastUltimate", HandleCastUltimate);
+    }
+
+    void HandleCastUltimate(BytesData data)
+    {
+        var floatData = data as FloatDataBytes;
+        var size = 1 - floatData.FloatValue;
+
+        spaceBetweenLines = minSpaceBetweenLines + (maxSpaceBetweenLines - minSpaceBetweenLines) * size;
+    }
     private void Update()
     {
         var player = AllyMovement.Instance.transform.position;
