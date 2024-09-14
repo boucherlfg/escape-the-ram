@@ -66,7 +66,7 @@ public class EnemyEntity : MonoBehaviour
     public void UltKnockback(Vector2 direction, float strength) 
     {
         _isKnockbacking = true;
-        _rb.velocity = -direction * (strength / (transform.localScale.x*1.5f) );
+        _rb.velocity = -direction * (strength / (transform.localScale.x) );
     }
 
     public Rigidbody2D GetRigidbody2D() 

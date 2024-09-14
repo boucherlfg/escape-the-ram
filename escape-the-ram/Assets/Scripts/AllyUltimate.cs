@@ -102,7 +102,7 @@ public class AllyUltimate : MonoBehaviour
         },
         () =>
         {
-            EventManager.Dispatch("OnUltimatePullUpdate", new FloatDataBytes(1f));
+            EventManager.Dispatch("OnUltimatePullUpdate", new FloatDataBytes(0f));
             _isUltimateActive = false;
             _pullTimerAnim = null;
             SecondCastKnockbackEnemies();

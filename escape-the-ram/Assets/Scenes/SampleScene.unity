@@ -1580,7 +1580,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -55437,7 +55437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3281700849909728579, guid: e4b393e6700de1e49bd69ce62ad40baf, type: 3}
       propertyPath: _ultKnockbackStrength
-      value: 23
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4522595623358618371, guid: e4b393e6700de1e49bd69ce62ad40baf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -55482,6 +55482,14 @@ PrefabInstance:
     - target: {fileID: 5536885190087600665, guid: e4b393e6700de1e49bd69ce62ad40baf, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6196635644533393462, guid: e4b393e6700de1e49bd69ce62ad40baf, type: 3}
+      propertyPath: maxDistance
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6196635644533393462, guid: e4b393e6700de1e49bd69ce62ad40baf, type: 3}
+      propertyPath: maxNeighbours
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7239887608791920361, guid: e4b393e6700de1e49bd69ce62ad40baf, type: 3}
       propertyPath: screen
