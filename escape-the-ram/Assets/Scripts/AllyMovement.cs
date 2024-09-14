@@ -8,12 +8,21 @@ public class AllyMovement : SingletonBehaviour<AllyMovement>
 {
     public float maxDistance = 5;
     public int maxNeighbours = 5;
-    public float speed = 3;
+    [SerializeField]
+    private float maxSpeed = 3;
+    private float speed = 3;
+    public float MaxSpeed => maxSpeed;
+    public float Speed
+    {
+        get => speed;
+        set => speed = value;
+    }
 
     private Rigidbody2D _body;
 
     private void Start()
     {
+        speed = maxSpeed;
         _body = GetComponent<Rigidbody2D>();
     }
 
