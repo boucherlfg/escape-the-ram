@@ -11,6 +11,10 @@ public class AllyUltimate : MonoBehaviour
     [SerializeField] private float _ultContractionSpeed = 2f;
     [SerializeField] private float _ultKnockbackStrength = 9f;
 
+    private World _world;
+    private AllyMovement _allyMovement;
+    private EnemyCounter _enemyCounter;
+
     private List<EnemyEntity> pulledEnemies = new List<EnemyEntity>();
     private Vector2[] _enemiesStartingPositions; // Cached Positions of enemies when starting the ult.
     private Animate _cooldownTimerAnim;
@@ -18,8 +22,16 @@ public class AllyUltimate : MonoBehaviour
 
     private bool _isUltimateActive = false;
 
+    private void Awake()
+    {
+        _allyMovement = GetComponent<AllyMovement>();
+        _enemyCounter = GetComponent<EnemyCounter>();
+    }
+
     private void Start()
     {
+        _world = World.Instance;
+
         EventManager.AddEventListener("OnCastUltimate", HandleCastUltimate);
     }
 
@@ -50,10 +62,11 @@ public class AllyUltimate : MonoBehaviour
 
     private void FirstUltimateCast() 
     {
-        AllyMovement.Instance.SetIsMoving(false);
+        _allyMovement.SetIsMoving(false);
+        _enemyCounter.SetCanBeKilled(false);
         _isUltimateActive = true;
 
-        pulledEnemies = World.Instance.GetAllEnemies();
+        pulledEnemies = _world.GetAllEnemies();
 
         // Get all initial positions of enemies.
         _enemiesStartingPositions = new Vector2[pulledEnemies.Count];
@@ -82,16 +95,15 @@ public class AllyUltimate : MonoBehaviour
                     Rigidbody2D rb = enemy.GetRigidbody2D();
                     Vector2 dirToPlayer = ((Vector2)transform.position - rb.position).normalized;
                     enemy.transform.position = Vector3.Lerp(_enemiesStartingPositions[i], transform.position, progress);
-                    //float disToPlayer = Vector2.Distance(rb.position, (Vector2)transform.position);
-                    //rb.velocity = (dirToPlayer * _ultContractionSpeed) * Mathf.Min(disToPlayer/2f, 1f) * Time.fixedDeltaTime;
                 }
             }
         },
         () =>
         {
+            EventManager.Dispatch("OnUltimatePullUpdate", new FloatDataBytes(1f));
+            _isUltimateActive = false;
             _pullTimerAnim = null;
             SecondCastKnockbackEnemies();
-            _isUltimateActive = false;
         }, true);
 
         for (int i = 0; i < pulledEnemies.Count; i++)
@@ -108,7 +120,10 @@ public class AllyUltimate : MonoBehaviour
 
     private void SecondCastKnockbackEnemies()
     {
-        AllyMovement.Instance.SetIsMoving(true);
+        _allyMovement.SetIsMoving(true);
+        // Wait a bit for enemies to be sent away before starting to detect death again.
+        Animate.Delay(0.1f, () => { _enemyCounter.SetCanBeKilled(true); });
+
         _isUltimateActive = false;
 
         // Stop pull timer since we already recast.

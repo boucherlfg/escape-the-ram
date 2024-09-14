@@ -6,7 +6,6 @@ using Bytes;
 
 public class EnemyCounter : MonoBehaviour
 {
-    private bool isDead;
     [SerializeField]
     private float maxEnemyDistance;
     [SerializeField]
@@ -16,14 +15,18 @@ public class EnemyCounter : MonoBehaviour
     [SerializeField]
     int maxEnemyCount = 10;
 
-    /*private void Update()
+    private bool _isDead;
+    private bool _canBeKilled = true;
+
+    private void Update()
     {
-        if(isDead) return;
+        if(_isDead || !_canBeKilled) 
+            return;
 
         var hits = Physics2D.OverlapCircleAll(transform.position, maxEnemyDistance).Count(x => x.GetComponent<EnemyEntity>());
         if(hits >= maxEnemyCount) 
         {
-            isDead = true;
+            _isDead = true;
             gameObject.SetActive(false);
             EventManager.Dispatch("OnDeath", null);
         }
@@ -33,5 +36,10 @@ public class EnemyCounter : MonoBehaviour
         screen.color = color;
 
         move.Speed = move.MaxSpeed * (1 - (hits / maxEnemyCount));
-    }*/
+    }
+
+    public void SetCanBeKilled(bool canBeKilled) 
+    {
+        _canBeKilled = canBeKilled;
+    }
 }
