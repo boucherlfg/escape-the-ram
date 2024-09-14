@@ -37118,8 +37118,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spaceBetweenLines: 5
-  minSpaceBetweenLines: 0.5
-  maxSpaceBetweenLines: 1.5
+  minSpaceBetweenLines: 2
+  maxSpaceBetweenLines: 5
 --- !u!1 &1406569217
 GameObject:
   m_ObjectHideFlags: 0

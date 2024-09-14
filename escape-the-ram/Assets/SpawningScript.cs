@@ -36,7 +36,7 @@ public class SpawningScript : MonoBehaviour
         Vector2 center = min + (max - min) / 2;
         var screenSize = Vector2.Distance(max, center);
 
-        var direction = Random.insideUnitCircle;
+        var direction = Random.insideUnitCircle.normalized;
         direction.x = direction.x * (cameraRect.width / 2 + cameraRect.width / 10);
         direction.y = direction.y * (cameraRect.height / 2 + cameraRect.height / 10);
         var spawnPosition = center + direction;

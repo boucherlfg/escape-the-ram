@@ -13,33 +13,32 @@ public class EnemyEntity : MonoBehaviour
     private bool _isBeingDestroyedByUlt = false;
     private Vector2 screenBounds; // To detect screen edges
 
+    private Camera _mainCam;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _enemyMovement = GetComponent<EnemyMovement>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _mainCam = Camera.main;
     }
 
     private void Start()
     {
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+        
     }
 
     private void Update()
     {
+        var min = _mainCam.ScreenToWorldPoint(Vector2.zero);
+        var max = _mainCam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        var cameraRect = new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
+
         if (_isKnockbacking && !_isBeingDestroyedByUlt)
         {
             // Check for horizontal bounds (left and right)
-            if (transform.position.x > screenBounds.x || transform.position.x < -screenBounds.x)
+            if (!cameraRect.Contains(transform.position))
             {
                 _rb.velocity = new Vector2(-_rb.velocity.x, _rb.velocity.y) * 0.25f;
-                _isBeingDestroyedByUlt = true;
-            }
-
-            // Check for vertical bounds (top and bottom)
-            if (transform.position.y > screenBounds.y || transform.position.y < -screenBounds.y)
-            {
-                _rb.velocity = new Vector2(_rb.velocity.x, -_rb.velocity.y) * 0.25f;
                 _isBeingDestroyedByUlt = true;
             }
 
