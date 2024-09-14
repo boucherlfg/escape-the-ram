@@ -20,15 +20,19 @@ public class AllyMovement : SingletonBehaviour<AllyMovement>
 
     private Rigidbody2D _body;
 
+    private bool _isMoving = true;
+
     private void Start()
     {
         speed = maxSpeed;
         _body = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        if (!_isMoving)
+            return;
+
         var hits = Physics2D.OverlapCircleAll(transform.position, maxDistance)
                             .Where(x => x.GetComponent<EnemyMovement>())
                             .Take(maxNeighbours).ToList();
@@ -40,5 +44,11 @@ public class AllyMovement : SingletonBehaviour<AllyMovement>
         vector.Normalize();
 
         _body.velocity = -vector * speed;
+    }
+
+    public void SetIsMoving(bool isMoving) 
+    {
+        _isMoving = isMoving;
+        _body.velocity = Vector2.zero;
     }
 }
