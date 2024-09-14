@@ -16,7 +16,7 @@ public class EnemyCounter : MonoBehaviour
     [SerializeField]
     int maxEnemyCount = 10;
 
-    private void Update()
+    /*private void Update()
     {
         if(isDead) return;
 
@@ -33,5 +33,5 @@ public class EnemyCounter : MonoBehaviour
         screen.color = color;
 
         move.Speed = move.MaxSpeed * (1 - (hits / maxEnemyCount));
-    }
+    }*/
 }

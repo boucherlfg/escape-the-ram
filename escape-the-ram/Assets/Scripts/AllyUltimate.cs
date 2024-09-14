@@ -20,7 +20,7 @@ public class AllyUltimate : MonoBehaviour
 
     private void Start()
     {
-        EventManager.AddEventListener("CastUltimate", HandleCastUltimate);
+        EventManager.AddEventListener("OnCastUltimate", HandleCastUltimate);
     }
 
     private void Update()
@@ -28,7 +28,7 @@ public class AllyUltimate : MonoBehaviour
         // Debug input
         if (Input.GetKeyDown(KeyCode.E))
         {
-            EventManager.Dispatch("CastUltimate", null);
+            EventManager.Dispatch("OnCastUltimate", null);
         }
     }
 
@@ -69,6 +69,8 @@ public class AllyUltimate : MonoBehaviour
         // Pull duration timer. Pull for x seconds then knockback.
         _pullTimerAnim = Animate.LerpSomething(_ultDuration, (progress)=> 
         {
+            EventManager.Dispatch("OnUltimatePullUpdate", new FloatDataBytes(progress));
+
             // Don't go too close to player.
             progress = Mathf.Min(progress, 0.9f);
 

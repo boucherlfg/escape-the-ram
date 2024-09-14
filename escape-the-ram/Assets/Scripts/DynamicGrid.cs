@@ -16,21 +16,22 @@ public class DynamicGrid : MonoBehaviour
     private void Start()
     {
         lines = GetComponentsInChildren<LineRenderer>().ToList();
-        EventManager.AddEventListener("OnCastUltimate", HandleCastUltimate);
+        EventManager.AddEventListener("OnUltimatePullUpdate", HandleOnUltimatePullUpdate);
     }
 
     private void OnDestroy()
     {
-        EventManager.RemoveEventListener("OnCastUltimate", HandleCastUltimate);
+        EventManager.RemoveEventListener("OnUltimatePullUpdate", HandleOnUltimatePullUpdate);
     }
 
-    void HandleCastUltimate(BytesData data)
+    private void HandleOnUltimatePullUpdate(BytesData data)
     {
         var floatData = data as FloatDataBytes;
         var size = 1 - floatData.FloatValue;
 
         spaceBetweenLines = minSpaceBetweenLines + (maxSpaceBetweenLines - minSpaceBetweenLines) * size;
     }
+
     private void Update()
     {
         var player = AllyMovement.Instance.transform.position;
