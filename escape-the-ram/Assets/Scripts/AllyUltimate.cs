@@ -93,8 +93,10 @@ public class AllyUltimate : MonoBehaviour
                 if (enemy != null)
                 {
                     Rigidbody2D rb = enemy.GetRigidbody2D();
+                    // If enemy is bigger, progress is slower and reaches less close to the player.
+                    float usedProgress = Mathf.Min(progress, progress / rb.transform.localScale.x * 1.5f);
                     Vector2 dirToPlayer = ((Vector2)transform.position - rb.position).normalized;
-                    enemy.transform.position = Vector3.Lerp(_enemiesStartingPositions[i], transform.position, progress);
+                    enemy.transform.position = Vector3.Lerp(_enemiesStartingPositions[i], transform.position, usedProgress);
                 }
             }
         },
@@ -109,20 +111,16 @@ public class AllyUltimate : MonoBehaviour
         for (int i = 0; i < pulledEnemies.Count; i++)
         {
             EnemyEntity enemy = pulledEnemies[i];
-            SetupEnemyPull(enemy);
+            if (enemy != null)
+                enemy.SetEnemyIsBeingKnocbacked(false);
         }
-    }
-
-    private void SetupEnemyPull(EnemyEntity enemy)
-    {
-        enemy.SetEnemyMovementEnabled(false);
     }
 
     private void SecondCastKnockbackEnemies()
     {
         _allyMovement.SetIsMoving(true);
         // Wait a bit for enemies to be sent away before starting to detect death again.
-        Animate.Delay(0.1f, () => { _enemyCounter.SetCanBeKilled(true); });
+        Animate.Delay(0.2f, () => { _enemyCounter.SetCanBeKilled(true); });
 
         _isUltimateActive = false;
 
@@ -134,7 +132,8 @@ public class AllyUltimate : MonoBehaviour
         for (int i = 0; i < pulledEnemies.Count; i++)
         {
             EnemyEntity enemy = pulledEnemies[i];
-            KnockbackEnemy(enemy);
+            Vector2 dirToPlayer = ((Vector2)transform.position - (Vector2)enemy.transform.position).normalized;
+            enemy.UltKnockback(dirToPlayer, _ultKnockbackStrength * Random.Range(0.7f, 1.3f));
         }
 
         // After a bit of knockback, we re-enable the enemy movement.
@@ -143,15 +142,9 @@ public class AllyUltimate : MonoBehaviour
             for (int i = 0; i < pulledEnemies.Count; i++)
             {
                 EnemyEntity enemy = pulledEnemies[i];
-                enemy.SetEnemyMovementEnabled(true);
+                if(enemy != null)
+                    enemy.SetEnemyIsBeingKnocbacked(true);
             }
         }, true);
-    }
-
-    private void KnockbackEnemy(EnemyEntity enemy)
-    {
-        Rigidbody2D rb = enemy.GetRigidbody2D();
-        Vector2 dirToPlayer = ((Vector2)transform.position - rb.position).normalized;
-        rb.velocity = -dirToPlayer * _ultKnockbackStrength * Random.Range(0.8f, 1.2f);
     }
 }

@@ -15,6 +15,8 @@ public class World : SingletonBehaviour<World>
 
     public List<EnemyEntity> GetAllEnemies() 
     {
+        // Fetch enemies everytime
+        _allEnemies = new List<EnemyEntity>(gameObject.GetComponentsInChildren<EnemyEntity>());
         return _allEnemies;
     }
 }
