@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 3281700849909728579}
   - component: {fileID: 743115531163980967}
   - component: {fileID: 1506003636393489430}
-  - component: {fileID: -6752455803290374313}
+  - component: {fileID: 7239887608791920361}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -341,7 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ultDuration: 3
   _ultCooldown: 3
-  _ultContractionSpeed: 333
+  _ultContractionSpeed: 150
   _ultKnockbackStrength: 9
 --- !u!50 &743115531163980967
 Rigidbody2D:
@@ -405,7 +405,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &-6752455803290374313
+--- !u!114 &7239887608791920361
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -414,10 +414,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5536885190087600665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86afdc54dadde1a49ac8c1929d14d16f, type: 3}
+  m_Script: {fileID: 11500000, guid: 91345a40e7a326a4fa164aca5a5c0902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxEnemyDistance: 1
   screen: {fileID: 7150597725863700697}
   move: {fileID: 6196635644533393462}
-  maxEnemyCounter: 5
+  maxEnemyCount: 5
