@@ -12,6 +12,7 @@ public class AllyUltimate : MonoBehaviour
     [SerializeField] private float _ultKnockbackStrength = 9f;
 
     private List<EnemyEntity> pulledEnemies = new List<EnemyEntity>();
+    private Vector2[] _enemiesStartingPositions; // Cached Positions of enemies when starting the ult.
     private Animate _cooldownTimerAnim;
     private Animate _pullTimerAnim;
 
@@ -31,62 +32,66 @@ public class AllyUltimate : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void HandleCastUltimate(BytesData data) 
     {
-        if (!_isUltimateActive)
+        // Wait for timer to expire before starting again.
+        if (_cooldownTimerAnim != null)
             return;
 
-        for (int i = 0; i < pulledEnemies.Count; i++) 
+        if (!_isUltimateActive)
+        {
+            FirstUltimateCast();
+        }
+        else 
+        {
+            SecondCastKnockbackEnemies();
+        }
+    }
+
+    private void FirstUltimateCast() 
+    {
+        AllyMovement.Instance.SetIsMoving(false);
+        _isUltimateActive = true;
+
+        pulledEnemies = World.Instance.GetAllEnemies();
+
+        // Get all initial positions of enemies.
+        _enemiesStartingPositions = new Vector2[pulledEnemies.Count];
+        for (int i = 0; i < pulledEnemies.Count; i++)
         {
             EnemyEntity enemy = pulledEnemies[i];
             if (enemy != null)
             {
-                Rigidbody2D rb = enemy.GetRigidbody2D();
-                Vector2 dirToPlayer = ((Vector2)transform.position - rb.position).normalized;
-                float disToPlayer = Vector2.Distance(rb.position, (Vector2)transform.position);
-                rb.velocity = (dirToPlayer * _ultContractionSpeed) * Mathf.Min(disToPlayer/2f, 1f) * Time.fixedDeltaTime;
+                _enemiesStartingPositions[i] = enemy.transform.position;
             }
         }
-    }
-
-    private void HandleCastUltimate(BytesData data) 
-    {
-        // Wait for timer to expire before starting again.
-        if (!_isUltimateActive && _cooldownTimerAnim != null)
-            return;
-
-        World world = World.Instance;
-        pulledEnemies = world.GetAllEnemies();
-
-        // cooldown timer. Null means its done.
-        _cooldownTimerAnim = Animate.Delay(_ultCooldown, () => { _cooldownTimerAnim = null; }, true);
 
         // Pull duration timer. Pull for x seconds then knockback.
-        _pullTimerAnim = Animate.Delay(_ultDuration, () => 
-        { 
+        _pullTimerAnim = Animate.LerpSomething(_ultDuration, (progress)=> 
+        {
+            // Don't go too close to player.
+            progress = Mathf.Min(progress, 0.9f);
+
+            for (int i = 0; i < pulledEnemies.Count; i++)
+            {
+                EnemyEntity enemy = pulledEnemies[i];
+                if (enemy != null)
+                {
+                    Rigidbody2D rb = enemy.GetRigidbody2D();
+                    Vector2 dirToPlayer = ((Vector2)transform.position - rb.position).normalized;
+                    enemy.transform.position = Vector3.Lerp(_enemiesStartingPositions[i], transform.position, progress);
+                    //float disToPlayer = Vector2.Distance(rb.position, (Vector2)transform.position);
+                    //rb.velocity = (dirToPlayer * _ultContractionSpeed) * Mathf.Min(disToPlayer/2f, 1f) * Time.fixedDeltaTime;
+                }
+            }
+        },
+        () =>
+        {
             _pullTimerAnim = null;
-            KnockbackEnemies();
+            SecondCastKnockbackEnemies();
             _isUltimateActive = false;
         }, true);
 
-        if (!_isUltimateActive)
-        {
-            // Cast: Start pulling all.
-            PrepareEnemies();
-            _isUltimateActive = true;
-        }
-        else 
-        {
-            // Recast: Knockback all.
-            KnockbackEnemies();
-            _isUltimateActive = false;
-            // Stop pull timer since we already recast.
-            _pullTimerAnim.Stop(false);
-        }
-    }
-
-    private void PrepareEnemies() 
-    {
         for (int i = 0; i < pulledEnemies.Count; i++)
         {
             EnemyEntity enemy = pulledEnemies[i];
@@ -94,8 +99,21 @@ public class AllyUltimate : MonoBehaviour
         }
     }
 
-    private void KnockbackEnemies()
+    private void SetupEnemyPull(EnemyEntity enemy)
     {
+        enemy.SetEnemyMovementEnabled(false);
+    }
+
+    private void SecondCastKnockbackEnemies()
+    {
+        AllyMovement.Instance.SetIsMoving(true);
+        _isUltimateActive = false;
+
+        // Stop pull timer since we already recast.
+        _pullTimerAnim?.Stop(false);
+        // cooldown timer. Null means its done.
+        _cooldownTimerAnim = Animate.Delay(_ultCooldown, () => { _cooldownTimerAnim = null; }, true);
+
         for (int i = 0; i < pulledEnemies.Count; i++)
         {
             EnemyEntity enemy = pulledEnemies[i];
@@ -111,11 +129,6 @@ public class AllyUltimate : MonoBehaviour
                 enemy.SetEnemyMovementEnabled(true);
             }
         }, true);
-    }
-
-    private void SetupEnemyPull(EnemyEntity enemy) 
-    {
-        enemy.SetEnemyMovementEnabled(false);
     }
 
     private void KnockbackEnemy(EnemyEntity enemy)

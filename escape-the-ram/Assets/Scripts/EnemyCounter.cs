@@ -15,26 +15,17 @@ public class EnemyCounter : MonoBehaviour
     private AllyMovement move;
     [SerializeField]
     int maxEnemyCount = 10;
-    // Start is called before the first frame update
-    void Start()
-    {
-        EventManager.AddEventListener("OnDeath", HandleDeath);
-    }
 
-    void HandleDeath(BytesData data){
-        isDead = true;
-        EventManager.RemoveEventListener("OnDeath", HandleDeath);
-    }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if(isDead) return;
+
         var hits = Physics2D.OverlapCircleAll(transform.position, maxEnemyDistance).Count(x => x.GetComponent<EnemyEntity>());
         if(hits >= maxEnemyCount) 
         {
-            EventManager.Dispatch("OnDeath", null);
+            isDead = true;
             gameObject.SetActive(false);
+            EventManager.Dispatch("OnDeath", null);
         }
         
         var color = screen.color;
