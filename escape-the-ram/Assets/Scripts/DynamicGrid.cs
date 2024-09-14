@@ -12,6 +12,7 @@ public class DynamicGrid : MonoBehaviour
     [SerializeField]
     private float maxSpaceBetweenLines = 1.5f;
     private List<LineRenderer> lines = new();
+    private Vector3 offset;
 
     private void Start()
     {
@@ -29,11 +30,16 @@ public class DynamicGrid : MonoBehaviour
         var floatData = data as FloatDataBytes;
         var size = 1 - floatData.FloatValue;
 
-        spaceBetweenLines = minSpaceBetweenLines + (maxSpaceBetweenLines - minSpaceBetweenLines) * size;
+        var newScale = minSpaceBetweenLines + (maxSpaceBetweenLines - minSpaceBetweenLines) * size;
+
+        var difference = spaceBetweenLines - newScale;
+        offset = -(AllyMovement.Instance.transform.position * difference);
+        spaceBetweenLines = newScale;
     }
 
     private void Update()
     {
+        var aspect = Screen.width / Screen.height;
         var player = AllyMovement.Instance.transform.position;
         var linesPerSide = lines.Count / 2;
         var center = linesPerSide / 2;
@@ -41,12 +47,12 @@ public class DynamicGrid : MonoBehaviour
         {
             lines[i].SetPositions(new Vector3[]
             {
-                new(-50 + player.x, -center + i * spaceBetweenLines),
-                new(50 + player.x, -center + i * spaceBetweenLines)
+                offset + new Vector3(-50 + player.x, (-center + i + (int)player.y) * spaceBetweenLines),
+                offset + new Vector3(50 + player.x, (-center + i + (int)player.y) * spaceBetweenLines)
             });
             lines[linesPerSide + i].SetPositions(new Vector3[]{
-                new(-center + i * spaceBetweenLines, -50 + player.y),
-                new(-center + i * spaceBetweenLines, 50 + player.y)
+                offset + new Vector3((-center + i + (int)(player.x * aspect)) * spaceBetweenLines, -50 + player.y),
+                offset + new Vector3((-center + i + (int)(player.x * aspect)) * spaceBetweenLines, 50 + player.y)
             });
         }
     }
