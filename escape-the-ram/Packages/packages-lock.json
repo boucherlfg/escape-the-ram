@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.craftwill.bytes": {
+      "version": "https://github.com/craftwill/bytes-unity-utils-public.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "ddb5a163a45151c47cc2b65ef9d0d1d56f122ef3"
+    },
     "com.unity.2d.animation": {
       "version": "9.1.1",
       "depth": 1,
