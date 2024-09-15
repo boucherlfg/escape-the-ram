@@ -40,11 +40,6 @@ public class AllyUltimate : MonoBehaviour
     private void Update()
     {
         pulledEnemies.RemoveAll(x => !x);
-        // Debug input
-        /*if (Input.GetKeyDown(KeyCode.E))
-        {
-            EventManager.Dispatch("OnCastUltimate", null);
-        }*/
     }
 
     private void HandleCastUltimate(BytesData data) 
@@ -140,8 +135,14 @@ public class AllyUltimate : MonoBehaviour
 
         // Stop pull timer since we already recast.
         _pullTimerAnim?.Stop(false);
+
+        EventManager.Dispatch("OnButtonStateChanged", new BoolDataBytes(false));
         // cooldown timer. Null means its done.
-        _cooldownTimerAnim = Animate.Delay(_ultCooldown, () => { _cooldownTimerAnim = null; }, true);
+        _cooldownTimerAnim = Animate.Delay(_ultCooldown, () => 
+        {
+            EventManager.Dispatch("OnButtonStateChanged", new BoolDataBytes(true));
+            _cooldownTimerAnim = null;
+        }, true);
 
         for (int i = 0; i < pulledEnemies.Count; i++)
         {

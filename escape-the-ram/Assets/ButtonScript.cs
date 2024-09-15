@@ -26,7 +26,14 @@ public class ButtonScript : SingletonBehaviour<ButtonScript>
         EventManager.AddEventListener("IntroIsDone", HandleIntroIsDone);
         EventManager.AddEventListener("OnUltimatePull", HandleUltimatePull);
         EventManager.AddEventListener("OnUltimatePush", HandleUltimatePush);
+        EventManager.AddEventListener("OnButtonStateChanged", HandleButtonStateChanged);
         EventManager.AddEventListener("OnDeath", HandleDeath);
+    }
+
+    private void HandleButtonStateChanged(BytesData data)
+    {
+        var state = (data as BoolDataBytes).BoolValue;
+        button.interactable = state;
     }
 
     private void HandleDeath(BytesData data)

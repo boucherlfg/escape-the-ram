@@ -34,6 +34,7 @@ public class GameOverMenu : MonoBehaviour
 
     private void HandleDeath(BytesData data)
     {
+
         panel.SetActive(true);
         EventManager.RemoveEventListener("OnDeath", HandleDeath);
     }
