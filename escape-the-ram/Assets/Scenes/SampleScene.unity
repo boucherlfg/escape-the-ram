@@ -81968,7 +81968,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 1750409404530101953, guid: 1128a3e25b399ff499a2b86024d27f4a, type: 3}
-  minimumInterval: 0.2
+  minimumInterval: 0.25
   maximumInterval: 1.5
   maximumDeadEnemy: 150
 --- !u!114 &1533559446

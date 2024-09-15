@@ -308,7 +308,7 @@ MonoBehaviour:
   maxEnemyDistance: 1
   screen: {fileID: 5230464933032833537}
   move: {fileID: 6196635644533393462}
-  maxEnemyCount: 15
+  maxEnemyCount: 12
 --- !u!82 &6850657778036356378
 AudioSource:
   m_ObjectHideFlags: 0
