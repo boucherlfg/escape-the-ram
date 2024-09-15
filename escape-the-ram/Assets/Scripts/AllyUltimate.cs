@@ -162,7 +162,7 @@ public class AllyUltimate : MonoBehaviour
         {
             EnemyEntity enemy = _pulledEnemies[i];
             Vector2 dirToPlayer = ((Vector2)transform.position - (Vector2)enemy.transform.position).normalized;
-            enemy.UltKnockback(dirToPlayer, _ultKnockbackStrength * _progress);
+            enemy.UltKnockback(dirToPlayer, _ultKnockbackStrength * 2 * _progress * _progress);
         }
 
         // After a bit of knockback, we re-enable the enemy movement.

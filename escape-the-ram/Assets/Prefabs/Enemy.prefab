@@ -142,6 +142,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6def13e15896e144a3e946afe34e001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyDeathPrefab: {fileID: 8095934479902112033, guid: ea89aaec0f8bd1545a0e5de8ccf03f6b, type: 3}
+  screenBoundsMargin: 5
+  minimumRandomSize: 0.5
+  maximumRandomSize: 2
   death: {fileID: 8300000, guid: a9e4c236abbb45f47a2bbcd0c8aa73aa, type: 3}
 --- !u!58 &943219191415464469
 CircleCollider2D:

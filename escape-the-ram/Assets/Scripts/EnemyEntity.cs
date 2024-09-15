@@ -6,6 +6,8 @@ using UnityEngine;
 public class EnemyEntity : MonoBehaviour
 {
     [SerializeField]
+    private GameObject _enemyDeathPrefab;
+    [SerializeField]
     private float screenBoundsMargin = 5;
     [SerializeField]
     private float minimumRandomSize = 0.5f;
@@ -58,8 +60,10 @@ public class EnemyEntity : MonoBehaviour
         }    
     }
 
-    private void DyingAnimation() 
+    private void DyingAnimation()
     {
+        Instantiate(_enemyDeathPrefab, transform.position, Quaternion.identity);
+
         AudioSource.PlayClipAtPoint(death, transform.position);
         Color startColor = _spriteRenderer.color;
         Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
