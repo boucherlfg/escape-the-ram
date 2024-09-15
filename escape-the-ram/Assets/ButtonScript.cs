@@ -38,10 +38,20 @@ public class ButtonScript : SingletonBehaviour<ButtonScript>
 
     private void HandleDeath(BytesData data)
     {
+        EventManager.RemoveEventListener("OnUltimatePull", HandleUltimatePull);
+        EventManager.RemoveEventListener("OnUltimatePush", HandleUltimatePush);
+        EventManager.RemoveEventListener("OnButtonStateChanged", HandleButtonStateChanged);
+        EventManager.RemoveEventListener("OnDeath", HandleDeath);
         SetListener(HandleRestart);
         label.text = "Restart";
+        StartCoroutine(DisableFor(3));
     }
-
+    IEnumerator DisableFor(float time) 
+    {
+        button.interactable = false;
+        yield return new WaitForSeconds(time);
+        button.interactable = true;
+    }
     void HandleRestart() {
         SceneManager.LoadScene(gameObject.scene.name);
     }
@@ -56,6 +66,7 @@ public class ButtonScript : SingletonBehaviour<ButtonScript>
     {
         EventManager.RemoveEventListener("IntroIsDone", HandleIntroIsDone);
         EventManager.RemoveEventListener("OnUltimatePull", HandleUltimatePull);
+        EventManager.RemoveEventListener("OnButtonStateChanged", HandleButtonStateChanged);
         EventManager.RemoveEventListener("OnUltimatePush", HandleUltimatePush);
         EventManager.RemoveEventListener("OnDeath", HandleDeath);
     }
@@ -72,6 +83,7 @@ public class ButtonScript : SingletonBehaviour<ButtonScript>
 
     private void HandleIntroIsDone(BytesData data)
     {
+        EventManager.RemoveEventListener("IntroIsDone", HandleIntroIsDone);
         label.text = "Pull";
         SetListener(Ultimate);
     }
