@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class EnemyEntity : MonoBehaviour
 {
+    [SerializeField]
+    private AudioClip death;
     private Rigidbody2D _rb;
     private EnemyMovement _enemyMovement;
     private SpriteRenderer _spriteRenderer;
@@ -51,6 +53,7 @@ public class EnemyEntity : MonoBehaviour
 
     private void DyingAnimation() 
     {
+        AudioSource.PlayClipAtPoint(death, transform.position);
         Color startColor = _spriteRenderer.color;
         Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
         Animate.LerpSomething(0.5f, (progress) =>

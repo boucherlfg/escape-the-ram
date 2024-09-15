@@ -6,6 +6,8 @@ using Bytes;
 
 public class AllyUltimate : MonoBehaviour
 {
+    [SerializeField] private AudioClip charging;
+    [SerializeField] private AudioClip explosion;
     [SerializeField] private float _ultDuration = 3f;
     [SerializeField] private float _ultCooldown = 10f;
     [SerializeField] private float _ultContractionSpeed = 2f;
@@ -39,10 +41,10 @@ public class AllyUltimate : MonoBehaviour
     {
         pulledEnemies.RemoveAll(x => !x);
         // Debug input
-        if (Input.GetKeyDown(KeyCode.E))
+        /*if (Input.GetKeyDown(KeyCode.E))
         {
             EventManager.Dispatch("OnCastUltimate", null);
-        }
+        }*/
     }
 
     private void HandleCastUltimate(BytesData data) 
@@ -63,6 +65,11 @@ public class AllyUltimate : MonoBehaviour
 
     private void FirstUltimateCast() 
     {
+        EventManager.Dispatch("OnUltimatePull", null);
+        var audio = GetComponent<AudioSource>();
+        audio.Stop();
+        audio.clip = charging;
+        audio.Play();
         _allyMovement.SetIsMoving(false);
         _enemyCounter.SetCanBeKilled(false);
         _isUltimateActive = true;
@@ -104,7 +111,6 @@ public class AllyUltimate : MonoBehaviour
         },
         () =>
         {
-            EventManager.Dispatch("OnUltimatePullUpdate", new FloatDataBytes(0f));
             _isUltimateActive = false;
             _pullTimerAnim = null;
             SecondCastKnockbackEnemies();
@@ -120,7 +126,12 @@ public class AllyUltimate : MonoBehaviour
 
     private void SecondCastKnockbackEnemies()
     {
+        EventManager.Dispatch("OnUltimatePush", null);
         EventManager.Dispatch("OnUltimatePullUpdate", new FloatDataBytes(0f));
+        var audio = GetComponent<AudioSource>();
+        audio.Stop();
+        audio.clip = explosion;
+        audio.Play();
         _allyMovement.SetIsMoving(true);
         // Wait a bit for enemies to be sent away before starting to detect death again.
         Animate.Delay(0.2f, () => { _enemyCounter.SetCanBeKilled(true); });

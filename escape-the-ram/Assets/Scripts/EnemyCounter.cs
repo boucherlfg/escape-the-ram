@@ -15,6 +15,8 @@ public class EnemyCounter : MonoBehaviour
     [SerializeField]
     int maxEnemyCount = 10;
 
+    int currentCount = 0;
+
     private bool _isDead;
     private bool _canBeKilled = true;
 
@@ -24,6 +26,11 @@ public class EnemyCounter : MonoBehaviour
             return;
 
         var hits = Physics2D.OverlapCircleAll(transform.position, maxEnemyDistance).Count(x => x.GetComponent<EnemyEntity>());
+        if (currentCount != hits)
+        {
+            currentCount = hits;
+            EventManager.Dispatch("OnDamageChanged", new FloatDataBytes(currentCount / (float)maxEnemyCount));
+        }
         if(hits >= maxEnemyCount) 
         {
             _isDead = true;
@@ -40,6 +47,6 @@ public class EnemyCounter : MonoBehaviour
 
     public void SetCanBeKilled(bool canBeKilled) 
     {
-        _canBeKilled = canBeKilled;
+        //_canBeKilled = canBeKilled;
     }
 }

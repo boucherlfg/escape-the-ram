@@ -26,11 +26,19 @@ public class SpawningScript : MonoBehaviour
     {
         mainCam = Camera.main;
         EventManager.AddEventListener("OnEnemyDeath", HandleEnemyDeath);
+        EventManager.AddEventListener("OnDeath", HandleDeath);
+    }
+
+    private void HandleDeath(BytesData data)
+    {
+        EventManager.Dispatch("GetScore", new IntDataBytes(deadEnemies));
+        EventManager.RemoveEventListener("OnDeath", HandleDeath);
     }
 
     void HandleEnemyDeath(BytesData data) 
     {
         deadEnemies++;
+        EventManager.Dispatch("OnScoreChanged", new IntDataBytes(deadEnemies));
     }
 
     float EnemySpawnInterval
