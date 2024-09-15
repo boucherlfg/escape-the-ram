@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class DynamicGrid : MonoBehaviour
 {
+    [SerializeField, Range(0, 2)]
+    private float contractionEffect = 1;
     [SerializeField]
     private int margin = 5;
     [SerializeField]
@@ -72,7 +74,7 @@ public class DynamicGrid : MonoBehaviour
         for (int i = 0; i < linesForWidth; i++)
         {
             float value = i / (float)linesForWidth;
-            value = Mathf.Pow(value, 1 + this.explosionProgress/2);
+            value = Mathf.Pow(value, 1 + this.explosionProgress * contractionEffect);
             value *= linesForWidth;
             var widthPosition = value * spaceBetweenLines * Vector2.left;
 
@@ -87,7 +89,7 @@ public class DynamicGrid : MonoBehaviour
         for (int i = 0; i < linesForHeight; i++)
         {
             float value = i / (float)linesForHeight;
-            value = Mathf.Pow(value, 1 + this.explosionProgress/2);
+            value = Mathf.Pow(value, 1 + this.explosionProgress * contractionEffect);
             value *= linesForHeight;
             var heightPosition = value * spaceBetweenLines * Vector2.up;
 

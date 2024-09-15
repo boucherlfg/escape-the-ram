@@ -74233,6 +74233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc42d5cf76379784ca24b82dd444cd2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contractionEffect: 0.56
   margin: 5
   spaceBetweenLines: 5
   minSpaceBetweenLines: 2
