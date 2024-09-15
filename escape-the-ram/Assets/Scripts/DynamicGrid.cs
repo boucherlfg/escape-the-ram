@@ -20,6 +20,7 @@ public class DynamicGrid : MonoBehaviour
     private Camera _mainCam;
 
     private float explosionProgress = 0;
+    private float explosionProgressTarget = 0;
     private void Start()
     {
         _mainCam = Camera.main;
@@ -36,8 +37,7 @@ public class DynamicGrid : MonoBehaviour
     {
         var floatData = data as FloatDataBytes;
         var size = 1 - floatData.FloatValue;
-        explosionProgress = floatData.FloatValue;
-        Debug.Log(explosionProgress);
+        explosionProgressTarget = floatData.FloatValue;
         var newScale = minSpaceBetweenLines + (maxSpaceBetweenLines - minSpaceBetweenLines) * size;
 
         var difference = spaceBetweenLines - newScale;
@@ -47,6 +47,7 @@ public class DynamicGrid : MonoBehaviour
 
     public void Update()
     {
+        explosionProgress = Mathf.Lerp(explosionProgress, explosionProgressTarget, 0.1f);
         _mainCam = _mainCam ? _mainCam : Camera.main;
 
         Vector2 min = _mainCam.ScreenToWorldPoint(Vector2.zero);

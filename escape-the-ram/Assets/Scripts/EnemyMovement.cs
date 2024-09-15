@@ -17,7 +17,7 @@ public class EnemyMovement : MonoBehaviour
     }
     private void Update()
     {
-        var speed = this.speed + 1 - transform.localScale.magnitude;
+        var speed = this.speed + (-1 + 1 / transform.localScale.magnitude);
         var vector = FleeVector() + FollowVector();
         _body.velocity = speed * vector;
     }

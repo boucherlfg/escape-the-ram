@@ -129,8 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detectDistance: 1
   maxNeighbours: 5
-  maxFleeDistance: 1
-  speed: 3
+  speed: 5
 --- !u!114 &3381194074739174983
 MonoBehaviour:
   m_ObjectHideFlags: 0

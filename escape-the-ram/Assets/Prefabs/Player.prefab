@@ -104,7 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxDistance: 5
   maxNeighbours: 5
-  maxSpeed: 3
+  maxSpeed: 4
 --- !u!114 &3281700849909728579
 MonoBehaviour:
   m_ObjectHideFlags: 0
