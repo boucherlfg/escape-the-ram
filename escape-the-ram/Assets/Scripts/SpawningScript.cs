@@ -41,7 +41,7 @@ public class SpawningScript : MonoBehaviour
     {
         get
         {
-            deadEnemies = Mathf.Min(maximumDeadEnemy, deadEnemies); 
+            var deadEnemies = Mathf.Min(maximumDeadEnemy, this.deadEnemies); 
             return maximumInterval - (maximumInterval - minimumInterval) * (deadEnemies / (float)maximumDeadEnemy);
         }
     }
