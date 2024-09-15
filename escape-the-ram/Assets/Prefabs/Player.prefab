@@ -51,6 +51,7 @@ MonoBehaviour:
   - {fileID: 1879760456, guid: eda6f5a4ff4bfce408dab8835bac38b9, type: 3}
   - {fileID: -356298044, guid: eda6f5a4ff4bfce408dab8835bac38b9, type: 3}
   - {fileID: -1158661880, guid: eda6f5a4ff4bfce408dab8835bac38b9, type: 3}
+  ultimateFace: {fileID: 611656563, guid: eda6f5a4ff4bfce408dab8835bac38b9, type: 3}
 --- !u!212 &8723190428846364125
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -229,7 +230,7 @@ MonoBehaviour:
   _ultCooldown: 2
   _ultContractionSpeed: 100
   _ultKnockbackStrength: 10
-  _maximumCameraShakeIntensity: 0.05
+  _maximumCameraShakeIntensity: 0.5
 --- !u!50 &743115531163980967
 Rigidbody2D:
   serializedVersion: 4
