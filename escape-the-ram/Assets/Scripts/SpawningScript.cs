@@ -4,17 +4,13 @@ using UnityEngine;
 public class SpawningScript : MonoBehaviour
 {
     [SerializeField]
-    private float minimumRandomSize = 0.5f;
-    [SerializeField]
-    private float maximumRanomSize = 2f;
-    [SerializeField]
     private GameObject enemy;
     [SerializeField]
     private float minimumInterval = 1f;
     [SerializeField]
     private float maximumInterval = 3f;
     [SerializeField]
-    private float maximumDeadEnemy = 100;
+    private float maximumDeadEnemy = 200;
     private float spawnCounter;
     Rect cameraRect;
     Camera mainCam;
@@ -45,8 +41,7 @@ public class SpawningScript : MonoBehaviour
     {
         get
         {
-            var intervalDelta = maximumInterval - minimumInterval;
-            return deadEnemies > maximumDeadEnemy ? minimumInterval : maximumInterval - deadEnemies * intervalDelta / maximumDeadEnemy;
+            return maximumInterval - (maximumInterval - minimumInterval) * (deadEnemies / (float)maximumDeadEnemy);
         }
     }
     // Update is called once per frame
@@ -69,6 +64,5 @@ public class SpawningScript : MonoBehaviour
         var spawnPosition = center + direction;
 
         var enemyInstance = Instantiate(enemy, spawnPosition, Quaternion.identity, transform);
-        enemyInstance.transform.localScale *= Random.Range(minimumRandomSize, maximumRanomSize);
     }
 }

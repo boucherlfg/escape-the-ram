@@ -6,6 +6,12 @@ using UnityEngine;
 public class EnemyEntity : MonoBehaviour
 {
     [SerializeField]
+    private float screenBoundsMargin = 5;
+    [SerializeField]
+    private float minimumRandomSize = 0.5f;
+    [SerializeField]
+    private float maximumRandomSize = 2f;
+    [SerializeField]
     private AudioClip death;
     private Rigidbody2D _rb;
     private EnemyMovement _enemyMovement;
@@ -26,13 +32,14 @@ public class EnemyEntity : MonoBehaviour
 
     private void Start()
     {
-        
+        transform.localScale *= Random.Range(minimumRandomSize, maximumRandomSize);
     }
 
     private void Update()
     {
-        var min = _mainCam.ScreenToWorldPoint(Vector2.zero);
-        var max = _mainCam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        var topRight = new Vector2(Screen.width, Screen.height);
+        var min = _mainCam.ScreenToWorldPoint(Vector2.one * screenBoundsMargin);
+        var max = _mainCam.ScreenToWorldPoint(topRight - topRight.normalized * screenBoundsMargin);
         var cameraRect = new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
 
         if (_isKnockbacking && !_isBeingDestroyedByUlt)
