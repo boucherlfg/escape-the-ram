@@ -21,7 +21,7 @@ public class AllyUltimate : MonoBehaviour
     private Animate _pullTimerAnim;
 
     private bool _isUltimateActive = false;
-
+    private float progress;
     private void Awake()
     {
         _allyMovement = GetComponent<AllyMovement>();
@@ -37,6 +37,7 @@ public class AllyUltimate : MonoBehaviour
 
     private void Update()
     {
+        pulledEnemies.RemoveAll(x => !x);
         // Debug input
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -86,6 +87,7 @@ public class AllyUltimate : MonoBehaviour
 
             // Don't go too close to player.
             progress = Mathf.Min(progress, 0.9f);
+            this.progress = progress;
 
             for (int i = 0; i < pulledEnemies.Count; i++)
             {
@@ -118,6 +120,7 @@ public class AllyUltimate : MonoBehaviour
 
     private void SecondCastKnockbackEnemies()
     {
+        EventManager.Dispatch("OnUltimatePullUpdate", new FloatDataBytes(0f));
         _allyMovement.SetIsMoving(true);
         // Wait a bit for enemies to be sent away before starting to detect death again.
         Animate.Delay(0.2f, () => { _enemyCounter.SetCanBeKilled(true); });
@@ -133,7 +136,7 @@ public class AllyUltimate : MonoBehaviour
         {
             EnemyEntity enemy = pulledEnemies[i];
             Vector2 dirToPlayer = ((Vector2)transform.position - (Vector2)enemy.transform.position).normalized;
-            enemy.UltKnockback(dirToPlayer, _ultKnockbackStrength * Random.Range(0.7f, 1.3f));
+            enemy.UltKnockback(dirToPlayer, _ultKnockbackStrength * progress);
         }
 
         // After a bit of knockback, we re-enable the enemy movement.

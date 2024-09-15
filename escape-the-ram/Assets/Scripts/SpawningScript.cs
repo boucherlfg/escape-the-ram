@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Bytes;
 using UnityEngine;
 
 public class SpawningScript : MonoBehaviour
@@ -11,22 +10,42 @@ public class SpawningScript : MonoBehaviour
     [SerializeField]
     private GameObject enemy;
     [SerializeField]
-    private float spawnInterval = 1f;
+    private float minimumInterval = 1f;
+    [SerializeField]
+    private float maximumInterval = 3f;
+    [SerializeField]
+    private float maximumDeadEnemy = 100;
     private float spawnCounter;
     Rect cameraRect;
     Camera mainCam;
-    float spawnDistance;
+
+    int deadEnemies = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         mainCam = Camera.main;
+        EventManager.AddEventListener("OnEnemyDeath", HandleEnemyDeath);
     }
 
+    void HandleEnemyDeath(BytesData data) 
+    {
+        deadEnemies++;
+    }
+
+    float EnemySpawnInterval
+    {
+        get
+        {
+            var intervalDelta = maximumInterval - minimumInterval;
+            return deadEnemies > maximumDeadEnemy ? minimumInterval : maximumInterval - deadEnemies * intervalDelta / maximumDeadEnemy;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
         spawnCounter += Time.deltaTime;
-        if(spawnCounter < spawnInterval) return;
+        if(spawnCounter < EnemySpawnInterval) return;
         spawnCounter = 0;
 
         var min = mainCam.ScreenToWorldPoint(Vector2.zero);

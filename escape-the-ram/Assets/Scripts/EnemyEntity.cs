@@ -59,6 +59,7 @@ public class EnemyEntity : MonoBehaviour
             _spriteRenderer.color = Color.Lerp(startColor, endColor, progress*progress);
         }, () =>
         {
+            EventManager.Dispatch("OnEnemyDeath", null);
             Destroy(this.gameObject);
         }, true);
     }
