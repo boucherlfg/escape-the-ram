@@ -10,7 +10,7 @@ public class SpawningScript : MonoBehaviour
     [SerializeField]
     private float maximumInterval = 3f;
     [SerializeField]
-    private float maximumDeadEnemy = 200;
+    private int maximumDeadEnemy = 200;
     private float spawnCounter;
     Rect cameraRect;
     Camera mainCam;
@@ -41,6 +41,7 @@ public class SpawningScript : MonoBehaviour
     {
         get
         {
+            deadEnemies = Mathf.Min(maximumDeadEnemy, deadEnemies); 
             return maximumInterval - (maximumInterval - minimumInterval) * (deadEnemies / (float)maximumDeadEnemy);
         }
     }
