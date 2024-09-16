@@ -13,6 +13,7 @@ public class AllyUltimate : MonoBehaviour
     [SerializeField] private float _ultContractionSpeed = 2f;
     [SerializeField] private float _ultKnockbackStrength = 9f;
     [SerializeField] private float _maximumCameraShakeIntensity = 0.05f;
+    [SerializeField] private float _fullChargeBonus = 2;
 
     private World _world;
     private Camera _mainCamera;
@@ -27,6 +28,8 @@ public class AllyUltimate : MonoBehaviour
     private float _currentCameraShakeIntensity = 0;
     private bool _isUltimateActive = false;
     private float _progress;
+    bool isFull;
+
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -122,6 +125,7 @@ public class AllyUltimate : MonoBehaviour
         {
             _isUltimateActive = false;
             _pullTimerAnim = null;
+            isFull = true;
             SecondCastKnockbackEnemies();
         }, true);
 
@@ -151,6 +155,7 @@ public class AllyUltimate : MonoBehaviour
         _pullTimerAnim?.Stop(false);
 
         EventManager.Dispatch("OnButtonStateChanged", new BoolDataBytes(false));
+        StartCoroutine(Cooldown());
         // cooldown timer. Null means its done.
         _cooldownTimerAnim = Animate.Delay(_ultCooldown, () => 
         {
@@ -162,8 +167,9 @@ public class AllyUltimate : MonoBehaviour
         {
             EnemyEntity enemy = _pulledEnemies[i];
             Vector2 dirToPlayer = ((Vector2)transform.position - (Vector2)enemy.transform.position).normalized;
-            enemy.UltKnockback(dirToPlayer, _ultKnockbackStrength * 2 * _progress * _progress);
+            enemy.UltKnockback(dirToPlayer, _ultKnockbackStrength * 2 * _progress * _progress * (isFull ? _fullChargeBonus : 1));
         }
+        isFull = false;
 
         // After a bit of knockback, we re-enable the enemy movement.
         Animate.Delay(1f, () => 
@@ -175,5 +181,14 @@ public class AllyUltimate : MonoBehaviour
                     enemy.SetEnemyIsBeingKnocbacked(true);
             }
         }, true);
+    }
+
+    IEnumerator Cooldown()
+    {
+        for (float f = 0; f < 1; f += Time.deltaTime/_ultCooldown)
+        {
+            EventManager.Dispatch("Cooldown", new FloatDataBytes(f));
+            yield return null;
+        }
     }
 }

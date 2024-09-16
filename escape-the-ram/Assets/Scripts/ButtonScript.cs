@@ -28,6 +28,15 @@ public class ButtonScript : SingletonBehaviour<ButtonScript>
         EventManager.AddEventListener("OnUltimatePush", HandleUltimatePush);
         EventManager.AddEventListener("OnButtonStateChanged", HandleButtonStateChanged);
         EventManager.AddEventListener("OnDeath", HandleDeath);
+        EventManager.AddEventListener("Cooldown", HandleCooldown);
+    }
+
+    private void HandleCooldown(BytesData data)
+    {
+        var value = (data as FloatDataBytes).FloatValue;
+        if (value < 0.95) label.text = "Charging..";
+        else label.text = "Pull";
+        button.GetComponent<Image>().fillAmount = (data as FloatDataBytes).FloatValue;
     }
 
     private void HandleButtonStateChanged(BytesData data)
