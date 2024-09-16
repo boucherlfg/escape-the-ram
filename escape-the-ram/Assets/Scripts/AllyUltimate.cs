@@ -155,7 +155,7 @@ public class AllyUltimate : MonoBehaviour
         _pullTimerAnim?.Stop(false);
 
         EventManager.Dispatch("OnButtonStateChanged", new BoolDataBytes(false));
-        StartCoroutine(Cooldown());
+        if (gameObject.activeSelf) StartCoroutine(Cooldown());
         // cooldown timer. Null means its done.
         _cooldownTimerAnim = Animate.Delay(_ultCooldown, () => 
         {
@@ -187,6 +187,7 @@ public class AllyUltimate : MonoBehaviour
     {
         for (float f = 0; f < 1; f += Time.deltaTime/_ultCooldown)
         {
+            if (!gameObject.activeSelf) break;
             EventManager.Dispatch("Cooldown", new FloatDataBytes(f));
             yield return null;
         }
