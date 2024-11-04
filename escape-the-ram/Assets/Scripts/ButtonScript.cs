@@ -6,6 +6,7 @@ using System.Diagnostics.Tracing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -29,6 +30,15 @@ public class ButtonScript : SingletonBehaviour<ButtonScript>
         EventManager.AddEventListener("OnButtonStateChanged", HandleButtonStateChanged);
         EventManager.AddEventListener("OnDeath", HandleDeath);
         EventManager.AddEventListener("Cooldown", HandleCooldown);
+        var controls = new Controls();
+        controls.Player.Enable();
+        controls.Player.Button.performed += HandleButtonPressed;
+    }
+
+    private void HandleButtonPressed(InputAction.CallbackContext obj)
+    {
+        if(!button.interactable) return;
+        button.onClick.Invoke();
     }
 
     private void HandleCooldown(BytesData data)
